@@ -1,11 +1,11 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
 
-const { initDatabase } = require('./config/database');
-const adminRoutes = require('./routes/admin');
-const employeeRoutes = require('./routes/employees');
-const timeEntryRoutes = require('./routes/timeEntries');
+const { initDatabase } = require("./config/database");
+const adminRoutes = require("./routes/admin");
+const employeeRoutes = require("./routes/employees");
+const timeEntryRoutes = require("./routes/timeEntries");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,33 +21,33 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/api/admin', adminRoutes);
-app.use('/api/employees', employeeRoutes);
-app.use('/api/time-entries', timeEntryRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/employees", employeeRoutes);
+app.use("/api/time-entries", timeEntryRoutes);
 
 // Health check
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    message: 'Calong-Tick API is running',
-    timestamp: new Date().toISOString()
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "OK",
+    message: "Calong-Tick API is running",
+    timestamp: new Date().toISOString(),
   });
 });
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ 
-    success: false, 
-    message: 'Endpoint not found' 
+  res.status(404).json({
+    success: false,
+    message: "Endpoint not found",
   });
 });
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.error('Server error:', err);
-  res.status(500).json({ 
-    success: false, 
-    message: 'Internal server error' 
+  console.error("Server error:", err);
+  res.status(500).json({
+    success: false,
+    message: "Internal server error",
   });
 });
 
@@ -56,20 +56,10 @@ const startServer = async () => {
   try {
     await initDatabase();
     app.listen(PORT, () => {
-      console.log(`
-╔═══════════════════════════════════════════════════╗
-║                                                   ║
-║   🍜 Calong-Tick API Server                       ║
-║   Korean Restaurant Time Tracking                 ║
-║                                                   ║
-║   Server running on port ${PORT}                    ║
-║   http://localhost:${PORT}                          ║
-║                                                   ║
-╚═══════════════════════════════════════════════════╝
-      `);
+      console.log(`Calong-Tick API ServerServer running on port ${PORT}`);
     });
   } catch (error) {
-    console.error('Failed to start server:', error);
+    console.error("Failed to start server:", error);
     process.exit(1);
   }
 };

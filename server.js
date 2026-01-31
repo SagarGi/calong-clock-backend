@@ -15,14 +15,6 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from Vue build
-app.use(express.static(path.join(__dirname, "public")));
-
-// Handle Vue Router - send all non-API routes to index.html
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
 // Request logging
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
@@ -41,6 +33,14 @@ app.get("/api/health", (req, res) => {
     message: "Calong-Tick API is running",
     timestamp: new Date().toISOString(),
   });
+});
+
+// Serve static files from Vue build
+app.use(express.static(path.join(__dirname, "public")));
+
+// Handle Vue Router - send all non-API routes to index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // 404 handler

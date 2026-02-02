@@ -34,22 +34,23 @@ CREATE TABLE IF NOT EXISTS employees (
 
 -- Create time_entries table
 CREATE TABLE IF NOT EXISTS time_entries (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  employee_id INT NOT NULL,
-  clock_in DATETIME NOT NULL,
-  clock_out DATETIME,
-  hours_worked DECIMAL(5, 2),
-  minutes_worked INT,
-  total_minutes INT,
-  notes TEXT,
-  entry_date DATE NOT NULL,
-  entry_week INT,
-  entry_month INT,
-  entry_year INT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE
-);
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    clock_in DATETIME NOT NULL,
+    clock_out DATETIME,
+    break_minutes INT DEFAULT 0,
+    hours_worked DECIMAL(5, 2),
+    minutes_worked INT,
+    total_minutes INT,
+    notes TEXT,
+    entry_date DATE NOT NULL,
+    entry_week INT,
+    entry_month INT,
+    entry_year INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE
+    );
 
 -- Create indexes for better query performance
 CREATE INDEX idx_employees_pin ON employees(pin);

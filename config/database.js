@@ -55,6 +55,7 @@ const initDatabase = async () => {
         employee_id INT NOT NULL,
         clock_in DATETIME NOT NULL,
         clock_out DATETIME,
+        break_minutes INT DEFAULT 0,
         hours_worked DECIMAL(5, 2),
         minutes_worked INT,
         total_minutes INT,

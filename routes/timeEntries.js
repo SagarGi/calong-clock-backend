@@ -565,6 +565,23 @@ router.post("/manual", authenticateAdmin, async (req, res) => {
     }
 
     const clockInDate = new Date(clock_in);
+    const entryDate = clockInDate.toISOString().split("T")[0];
+
+    // Check if entry already exists for this date
+    const [existingEntry] = await pool.execute(
+      "SELECT id FROM time_entries WHERE employee_id = ? AND entry_date = ?",
+      [employee_id, entryDate]
+    );
+
+    if (existingEntry.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "An entry already exists for this employee on this date. Please edit the existing entry instead.",
+      });
+    }
+
+    // Rest of your existing code continues here...
     const clockOutDate = new Date(clock_out);
     const breakMins = parseInt(break_minutes) || 0;
     const { hours, minutes, totalMinutes, hoursDecimal } = calculateTime(
@@ -573,7 +590,6 @@ router.post("/manual", authenticateAdmin, async (req, res) => {
       breakMins
     );
 
-    const entryDate = clockInDate.toISOString().split("T")[0];
     const entryWeek = getWeekNumber(clockInDate);
     const entryMonth = clockInDate.getMonth() + 1;
     const entryYear = clockInDate.getFullYear();
@@ -646,6 +662,23 @@ router.post("/employee-entry", async (req, res) => {
 
     const employee = employees[0];
     const clockInDate = new Date(clock_in);
+    const entryDate = clockInDate.toISOString().split("T")[0];
+
+    // Check if entry already exists for this date
+    const [existingEntry] = await pool.execute(
+      "SELECT id FROM time_entries WHERE employee_id = ? AND entry_date = ?",
+      [employee.id, entryDate]
+    );
+
+    if (existingEntry.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "You have already submitted a time entry for this date. Contact to admin if you want to edit your current entry!",
+      });
+    }
+
+    // Rest of your existing code continues here...
     const clockOutDate = new Date(clock_out);
     const breakMins = parseInt(break_minutes) || 0;
     const { hours, minutes, totalMinutes, hoursDecimal } = calculateTime(
@@ -654,7 +687,6 @@ router.post("/employee-entry", async (req, res) => {
       breakMins
     );
 
-    const entryDate = clockInDate.toISOString().split("T")[0];
     const entryWeek = getWeekNumber(clockInDate);
     const entryMonth = clockInDate.getMonth() + 1;
     const entryYear = clockInDate.getFullYear();
